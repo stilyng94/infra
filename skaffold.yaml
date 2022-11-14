@@ -1,0 +1,28 @@
+apiVersion: skaffold/v3alpha1
+kind: Config
+metadata:
+  name: python-micro
+deploy:
+  kubectl:
+    remoteManifests:
+      - ./k8s/*
+build:
+  local:
+    concurrency: 1
+    tryImportMissing: false
+    useDockerCLI: false
+    push: false
+  artifacts:
+    - sync:
+        manual:
+          - dest: .
+            src: auth_service/**/*.py
+      image: escobar0216/micro-auth
+      context: ../auth-service
+      docker:
+        dockerfile: Dockerfile
+        noCache: false
+        pullParent: false
+        squash: false
+  
+  
